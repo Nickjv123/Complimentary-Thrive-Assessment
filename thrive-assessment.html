@@ -1,0 +1,211 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Fitness Thrive Assessment Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 200px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], input[type="tel"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .waiver {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #fafafa;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        #signature {
+            border: 1px solid #ccc;
+            margin-top: 5px;
+            width: 100%;
+            height: 150px;
+            background: #fff;
+        }
+        .admin-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://www.cityfitnessphilly.com/wp-content/uploads/2023/02/city-fitness-logo.png" alt="City Fitness Logo" class="logo">
+    <h1>Sign Up for Complimentary Thrive Assessment</h1>
+    
+    <form id="signupForm">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" required>
+        
+        <label for="time">Preferred Time Slot:</label>
+        <select id="time" required>
+            <option value="">Select one</option>
+            <option value="morning">Morning</option>
+            <option value="afternoon">Afternoon</option>
+            <option value="evening">Evening</option>
+        </select>
+        
+        <label for="trainer">Trainer Preference:</label>
+        <select id="trainer" required>
+            <option value="">Select one</option>
+            <option value="male">Male Trainer</option>
+            <option value="female">Female Trainer</option>
+            <option value="no-preference">No Preference</option>
+        </select>
+        
+        <label>Waiver of Liability:</label>
+        <div class="waiver">
+            <p>THRIVE ASSESSMENT OVERVIEW</p>
+            <p>The City Fitness Thrive Assessment is designed to establish a strong baseline for your fitness journey while addressing any injuries or discomfort. It includes an InBody scan to assess body composition, a movement screen to evaluate your mobility and stability, and a 60-minute workout tailored to your needs. Our program emphasizes "prehab" (injury prevention) and "rehab" (injury recovery) to keep you moving safely and effectively.</p>
+            <p>WAIVER OF LIABILITY</p>
+            <p>By signing up for a Complimentary Thrive Assessment at City Fitness, you agree to the following terms and conditions:</p>
+            <ol>
+                <li>You acknowledge that participation in the Thrive Assessment involves physical activity, which carries inherent risks of personal injury or discomfort.</li>
+                <li>You declare yourself to be physically sound and not suffering from any condition, impairment, disease, or illness that would prevent your participation in the assessment or use of gym equipment.</li>
+                <li>You agree to comply with all instructions provided by City Fitness trainers during the assessment, including proper use of equipment and adherence to safety guidelines.</li>
+                <li>City Fitness, its employees, trainers, or affiliates are held harmless and released from any and all responsibility, liabilities, demands, or claims arising from your participation in the Thrive Assessment.</li>
+                <li>You confirm that you are at least 18 years of age.</li>
+                <li>You understand that this assessment is designed to evaluate your fitness level and provide recommendations, with an emphasis on prehab and rehab to keep you moving safely, and you participate voluntarily with knowledge of the risks involved.</li>
+                <li>By signing below, you confirm that you have read and understood this Waiver of Liability and agree to its terms.</li>
+            </ol>
+            <p>Agreed by member electronically.</p>
+        </div>
+        
+        <label>
+            <input type="checkbox" id="agree" required>
+            I have read and agree to the Waiver of Liability above.
+        </label>
+        
+        <label for="signature">Digital Signature (Draw below):</label>
+        <canvas id="signature" width="600" height="150"></canvas>
+        <button type="button" onclick="clearSignature()">Clear Signature</button>
+        
+        <button type="submit">Submit Signup</button>
+    </form>
+    <p class="admin-note">Submitted information can be accessed by City Fitness staff via a secure admin dashboard (setup required). Contact IT support for access.</p>
+
+    <script>
+        const canvas = document.getElementById('signature');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        canvas.addEventListener('mousedown', () => drawing = true);
+        canvas.addEventListener('mouseup', () => drawing = false);
+        canvas.addEventListener('mousemove', draw);
+
+        function draw(event) {
+            if (!drawing) return;
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'black';
+            ctx.lineTo(event.offsetX, event.offsetY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(event.offsetX, event.offsetY);
+        }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for signing up! Your Thrive Assessment request has been submitted. Our staff will contact you to confirm your appointment.');
+        });
+    </script>
+</body>
+</html>
