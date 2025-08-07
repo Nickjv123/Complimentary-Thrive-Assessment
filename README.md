@@ -33,7 +33,7 @@
             margin-top: 10px;
             font-weight: bold;
         }
-        input[type="text"], input[type="email"], input[type="tel"], select {
+        input[type="text"], input[type="email"], input[type="tel"], select, textarea {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
@@ -99,6 +99,11 @@
             <option value="female">Female Trainer</option>
             <option value="no-preference">No Preference</option>
         </select>
+        
+        <label>Injuries (Optional):
+            <p>Please tell us about any injuries: where it is, how long you've had it, and how often it bothers you.</p>
+        </label>
+        <textarea id="injuries" name="injuries" rows="4" placeholder="e.g., Knee injury for 6 months, bothers me daily"></textarea>
         
         <label>Waiver of Liability:</label>
         <div class="waiver">
